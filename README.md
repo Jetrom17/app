@@ -20,7 +20,11 @@ git clone https://github.com/Jetrom17/app/
 ### Requisitos?
 
 > Não funciona no Termux diretamente.
+
 > Funciona em Linux, Windows e Mac.
+
 > `Git` instalado.
+
 > `python`(3) instalado.
+
 > Ambiente de desenvolvimento, como VSCode.
