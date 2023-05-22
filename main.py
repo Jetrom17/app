@@ -1,8 +1,9 @@
-from kivy.app import App # GUI
-from kivy.lang import Builder # Contruir
+from kivy.app import App
+from kivy.lang import Builder
+from kivy.clock import Clock
 import requests
 
-GUI = Builder.load_file("tela.kv")
+GUI = Builder.load_file("tela.kv") # Layout do app
 
 
 class MeuAplicativo(App):
@@ -10,12 +11,16 @@ class MeuAplicativo(App):
         return GUI
 
     def on_start(self):
-        self.root.ids["moeda1"].text = f"Dólar R${self.coin('USD')}"
-        self.root.ids["moeda2"].text = f"Euro R${self.coin('EUR')}"
-        self.root.ids["moeda3"].text = f"Bitcoin R${self.coin('BTC')}"
-        self.root.ids["moeda4"].text = f"Ethereum R${self.coin('ETH')}"
+        self.atualizar_cotacoes() # Dá um get novamente
+        Clock.schedule_interval(self.atualizar_cotacoes, 5)  # Atualiza cada 5 segundos
 
-    def coin(self, moeda):
+    def atualizar_cotacoes(self, *args):
+        self.root.ids["moeda1"].text = f"Dólar R${self.pegar_cotacao('USD')}"
+        self.root.ids["moeda2"].text = f"Euro R${self.pegar_cotacao('EUR')}"
+        self.root.ids["moeda3"].text = f"Bitcoin R${self.pegar_cotacao('BTC')}"
+        self.root.ids["moeda4"].text = f"Ethereum R${self.pegar_cotacao('ETH')}"
+
+    def pegar_cotacao(self, moeda):
         link = f"https://economia.awesomeapi.com.br/last/{moeda}-BRL"
         requisicao = requests.get(link)
         dic_requisicao = requisicao.json()
@@ -25,4 +30,4 @@ class MeuAplicativo(App):
 
 MeuAplicativo().run()
 
-# api: https://docs.awesomeapi.com.br/api-de-moedas
+# API: https://docs.awesomeapi.com.br/api-de-moedas
